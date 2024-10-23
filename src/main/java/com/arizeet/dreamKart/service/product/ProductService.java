@@ -1,6 +1,6 @@
 package com.arizeet.dreamKart.service.product;
 
-import com.arizeet.dreamKart.exceptions.ProductNotFoundException;
+import com.arizeet.dreamKart.exceptions.ResourceNotFoundException;
 import com.arizeet.dreamKart.model.Category;
 import com.arizeet.dreamKart.model.Product;
 import com.arizeet.dreamKart.repository.CategoryRepository;
@@ -51,14 +51,14 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(()->new ProductNotFoundException("Product not found!"));
+                .orElseThrow(()->new ResourceNotFoundException("Product not found!"));
     }
 
     @Override
     public void deleteProductById(Long id) {
         productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
-                        ()->{throw new ProductNotFoundException("Product not found!");});
+                        ()->{throw new ResourceNotFoundException("Product not found!");});
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct,request))
                 .map(productRepository :: save)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"));
     }
 
     private Product updateExistingProduct(Product existingProduct, ProductUpdateRequest request) {
